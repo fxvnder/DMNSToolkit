@@ -35,5 +35,5 @@ Conjunto de utilidades para as plataformas DMNS - Kayako, WHMCS, cPanel
 # Instalação
 
   1. Instalar extensão no browser que permita utilizar scripts (Greasemonkey, Tampermonkey, etc.)
-  2. Importar ficheiro JS deste GitHub
+  2. Importar ficheiro JS deste GitHub / Clicar em "Raw" no ficheiro JS acima.
   3. Profit 💰
