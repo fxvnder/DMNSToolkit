@@ -39,6 +39,10 @@
     /** Cria botão. */
     function createButton(text, icon, clickHandler, isAnchor = false, href = '#') {
         const button = isAnchor ? document.createElement('a') : document.createElement('button');
+        // Avoid submit type on button, since that triggers form submissions
+        // Evita que o tipo do botão seja submit, isto para que ao modificar forms,
+        // não sejam submetidos de imediato os valores
+        if (!isAnchor) button.type = 'button';
 
         button.style.cssText = `
             display: inline-flex;
