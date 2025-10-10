@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      2.0
 // @description  Conjunto de utilidades para as plataformas DMNS - Kayako, WHMCS, cPanel.
-// @author       FXVNDER (fxvnder.com)
+// @author       FXVNDER (fxvnder.com), HTL (hallows-tech-labs.pt)
 // @match        https://suporte.dominios.pt/staff/*
 // @match        https://my.dominios.pt/cp2002/*
 // @match        https://*.dnscpanel.com/*
@@ -18,7 +18,7 @@
 // @grant        GM_setClipboard
 // ==/UserScript==
 
-(function() {
+(function () {
     'use strict';
 
     // --- Ícones SVG ---
@@ -181,9 +181,9 @@
         const types = ['A', 'AAAA', 'CNAME', 'MX', 'TXT', 'SRV'];
         const promises = types.map(type =>
             fetch(`https://cloudflare-dns.com/dns-query?name=${domain}&type=${type}`, { headers: { 'Accept': 'application/dns-json' } })
-            .then(res => res.json())
-            .then(data => ({ type, data }))
-            .catch(e => ({ type, error: e }))
+                .then(res => res.json())
+                .then(data => ({ type, data }))
+                .catch(e => ({ type, error: e }))
         );
 
         Promise.allSettled(promises)
@@ -319,7 +319,7 @@
                 // A pesquisa de email geralmente usa o campo de pesquisa inteligente, não os dropdowns.
                 const searchInputEmail = document.querySelector('input[name="q"]');
                 const searchButtonEmail = document.querySelector('input[type="submit"][value="Search"]');
-                 if (searchInputEmail && searchButtonEmail) {
+                if (searchInputEmail && searchButtonEmail) {
                     searchInputEmail.value = email;
                     searchButtonEmail.click();
                     console.log('DMNSToolkit: Pesquisa no WHMCS por email iniciada.');
