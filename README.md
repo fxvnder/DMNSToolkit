@@ -45,6 +45,7 @@ Changelog:
 
 v1:
 - Suporte Kayako (clipboards, abrir whmcs/clientarea), WHMCS (dig+whois), cPanel (nameservers, dig -x)
+
 v2:
 - WHMCS (whois+whoispt; TDL), cPanel (análise email)
 - Rework (DIG/WHOIS)
