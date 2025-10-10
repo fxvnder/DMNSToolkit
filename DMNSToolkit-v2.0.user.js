@@ -618,6 +618,9 @@
         case currentPage.includes('my.dominios.pt/cp2002/todolist.php?action=edit'):
             setupToDoListPage();
             break;
+        case currentPage.includes('my.dominios.pt/cp2002/clientsdomains.php'):
+            setupRegistrarCommands();
+            break;
         case currentPage.includes('my.dominios.pt/cp2002/'):
             setupWHMCSAdmin();
             break;
