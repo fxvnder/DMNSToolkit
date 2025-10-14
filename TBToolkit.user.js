@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         DMNSToolkit v2.0 RELEASE
+// @name         TBToolkit v2.0 RELEASE
 // @namespace    http://tampermonkey.net/
 // @version      2.0
 // @description  Conjunto de utilidades para as plataformas DMNS - Kayako, WHMCS, cPanel.
