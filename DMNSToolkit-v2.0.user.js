@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         TBToolkit v2.1 RELEASE
+// @name         DMNSToolkit v2.0 RELEASE
 // @namespace    http://tampermonkey.net/
-// @version      2.1
+// @version      2.0
 // @description  Conjunto de utilidades para as plataformas DMNS - Kayako, WHMCS, cPanel.
 // @author       FXVNDER (fxvnder.com)
 // @match        https://suporte.dominios.pt/staff/*
@@ -314,8 +314,6 @@
             if (email) {
                 // A pesquisa de email geralmente usa o campo de pesquisa inteligente, não os dropdowns.
                 const searchInputEmail = document.querySelector('input[name="q"]');
-                const fieldSelector = document.getElementById('searchfield');
-                fieldSelector.value = 'Email Address';
                 const searchButtonEmail = document.querySelector('input[type="submit"][value="Search"]');
                  if (searchInputEmail && searchButtonEmail) {
                     searchInputEmail.value = email;
