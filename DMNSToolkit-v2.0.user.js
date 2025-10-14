@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      2.0
 // @description  Conjunto de utilidades para as plataformas DMNS - Kayako, WHMCS, cPanel.
-// @author       FXVNDER (fxvnder.com)
+// @author       FXVNDER (fxvnder.com), HTL (hallows-tech-labs.pt)
 // @match        https://suporte.dominios.pt/staff/*
 // @match        https://my.dominios.pt/cp2002/*
 // @match        https://*.dnscpanel.com/*
@@ -18,7 +18,7 @@
 // @grant        GM_setClipboard
 // ==/UserScript==
 
-(function() {
+(function () {
     'use strict';
 
     // --- Ícones SVG ---
@@ -39,6 +39,10 @@
     /** Cria botão. */
     function createButton(text, icon, clickHandler, isAnchor = false, href = '#') {
         const button = isAnchor ? document.createElement('a') : document.createElement('button');
+        // Avoid submit type on button, since that triggers form submissions
+        // Evita que o tipo do botão seja submit, isto para que ao modificar forms,
+        // não sejam submetidos de imediato os valores
+        if (!isAnchor) button.type = 'button';
 
         button.style.cssText = `
             display: inline-flex;
@@ -177,9 +181,9 @@
         const types = ['A', 'AAAA', 'CNAME', 'MX', 'TXT', 'SRV'];
         const promises = types.map(type =>
             fetch(`https://cloudflare-dns.com/dns-query?name=${domain}&type=${type}`, { headers: { 'Accept': 'application/dns-json' } })
-            .then(res => res.json())
-            .then(data => ({ type, data }))
-            .catch(e => ({ type, error: e }))
+                .then(res => res.json())
+                .then(data => ({ type, data }))
+                .catch(e => ({ type, error: e }))
         );
 
         Promise.allSettled(promises)
@@ -315,7 +319,7 @@
                 // A pesquisa de email geralmente usa o campo de pesquisa inteligente, não os dropdowns.
                 const searchInputEmail = document.querySelector('input[name="q"]');
                 const searchButtonEmail = document.querySelector('input[type="submit"][value="Search"]');
-                 if (searchInputEmail && searchButtonEmail) {
+                if (searchInputEmail && searchButtonEmail) {
                     searchInputEmail.value = email;
                     searchButtonEmail.click();
                     console.log('DMNSToolkit: Pesquisa no WHMCS por email iniciada.');
@@ -363,6 +367,73 @@
             }
         });
         whmcsObserver.observe(document.body, { childList: true, subtree: true });
+    }
+
+    /** Lógica para adicionar botões para gerir os Nameservers. */
+    function setupRegistrarCommands() {
+        console.info("DMNSToolkit LOADED - WHMCS Registrar Details");
+        function tryInject() {
+            const labelTd = Array.from(document.querySelectorAll('td.fieldlabel'))
+                .find(td => td.textContent.trim().includes('Registrar Commands'));
+
+            if (!labelTd) return;
+
+            const targetTd = labelTd.nextElementSibling;
+            if (!targetTd || targetTd.dataset.processed) return;
+
+            // Get saved nameservers or defaults
+            const savedNS = GM_getValue('defaultNameservers', [
+                'dns1.example.com',
+                'dns2.example.com',
+                'dns3.example.com',
+                'dns4.example.com'
+            ]);
+
+            // Button: Set NS
+            const setNsButton = createButton('Set NS', ICON_COPY, () => {
+                // Always get the latest saved values each click, old ones are cached
+                const nsValues = GM_getValue('defaultNameservers', [
+                    'dns1.example.com',
+                    'dns2.example.com',
+                    'dns3.example.com',
+                    'dns4.example.com'
+                ]);
+
+                // Iterate trough the current input inserting the values, stopping at the length of nsValues
+                for (let i = 1; i <= nsValues.length; i++) {
+                    const input = document.querySelector(`input[name="ns${i}"]`);
+                    if (input) input.value = nsValues[i - 1];
+                }
+            });
+
+            // Button: Edit NS
+            const editNsButton = createButton('Edit NS', ICON_EXTERNAL_LINK, () => {
+                const current = GM_getValue('defaultNameservers', savedNS);
+                const userInput = prompt(
+                    'Enter 4 nameservers separated by commas:',
+                    current.join(',')
+                );
+                if (userInput) {
+                    const nsArray = userInput.split(',').map(s => s.trim()).filter(Boolean);
+                    if (nsArray.length >= 2 && nsArray.length <= 4) {
+                        GM_setValue('defaultNameservers', nsArray);
+                        console.info('Default nameservers updated!');
+                    } else {
+                        alert('Please provide at least 2 nameservers, and no more than 4, separated by commas.');
+                    }
+                }
+            });
+
+            // Add buttons to the cell
+            targetTd.append(setNsButton, editNsButton);
+            targetTd.dataset.processed = 'true';
+        }
+
+        // Run now
+        tryInject();
+        // And on future mutations
+        const observer = new MutationObserver(tryInject);
+        observer.observe(document.body, { childList: true, subtree: true });
     }
 
     /** Lógica para a página ToDoList do WHMCS. */
@@ -546,6 +617,9 @@
             break;
         case currentPage.includes('my.dominios.pt/cp2002/todolist.php?action=edit'):
             setupToDoListPage();
+            break;
+        case currentPage.includes('my.dominios.pt/cp2002/clientsdomains.php'):
+            setupRegistrarCommands();
             break;
         case currentPage.includes('my.dominios.pt/cp2002/'):
             setupWHMCSAdmin();
