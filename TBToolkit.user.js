@@ -27,6 +27,8 @@
     const ICON_EXTERNAL_LINK = '🔗'
     const ICON_GEAR = '⚙️'
     const ICON_FLOPPY = '💾'
+    const ICON_QUESTION = '❔'
+    const ICON_TEST = '🧪'
 
     // --- Funções de Ajuda ---
 
@@ -223,7 +225,7 @@
             'Whois.com': `https://whois.com/whois/${domain}`,
         };
         for (const [site, url] of Object.entries(whoisSites)) {
-            const whoisButton = createButton(site, ICON_EXTERNAL_LINK, null, true, url);
+            const whoisButton = createButton(site, ICON_QUESTION, null, true, url);
             whoisLinksContainer.appendChild(whoisButton);
         }
         mainContainer.appendChild(whoisSection);
@@ -242,7 +244,7 @@
 
             const domainWithoutTld = domain.substring(0, domain.lastIndexOf('.pt'));
             const ptUrl = `https://www.pt.pt/pt/ferramentas/whois/detalhes/?site=${domainWithoutTld}&tld=.pt`;
-            const whoisPtButton = createButton('Consultar PT.pt', ICON_EXTERNAL_LINK, null, true, ptUrl);
+            const whoisPtButton = createButton('Consultar PT.pt', ICON_QUESTION, null, true, ptUrl);
             whoisPtLinksContainer.appendChild(whoisPtButton);
             mainContainer.appendChild(whoisPtSection);
         }
@@ -583,7 +585,7 @@
                             });
                             emailSectionContainer.appendChild(copyButton);
                         });
-                    const mailTesterButton = createButton('Testar no Mail-Tester.com', ICON_EXTERNAL_LINK, null, true, 'https://www.mail-tester.com/');
+                    const mailTesterButton = createButton('Testar no Mail-Tester.com', ICON_TEST, null, true, 'https://www.mail-tester.com/');
                     emailSectionContainer.appendChild(mailTesterButton);
                     newCell.appendChild(emailSectionContainer);
                     newRow.appendChild(newCell);
