@@ -25,6 +25,8 @@
     // Suportado através de Unicode
     const ICON_COPY = '📋'
     const ICON_EXTERNAL_LINK = '🔗'
+    const ICON_GEAR = '⚙️'
+    const ICON_FLOPPY = '💾'
 
     // --- Funções de Ajuda ---
 
@@ -393,7 +395,7 @@
             ]);
 
             // Button: Set NS
-            const setNsButton = createButton('Set NS', ICON_COPY, () => {
+            const setNsButton = createButton('Set NS', ICON_FLOPPY, () => {
                 // Always get the latest saved values each click, old ones are cached
                 const nsValues = GM_getValue('defaultNameservers', [
                     'dns1.example.com',
@@ -410,7 +412,7 @@
             });
 
             // Button: Edit NS
-            const editNsButton = createButton('Edit NS', ICON_EXTERNAL_LINK, () => {
+            const editNsButton = createButton('Edit NS', ICON_GEAR, () => {
                 const current = GM_getValue('defaultNameservers', savedNS);
                 const userInput = prompt(
                     'Enter 4 nameservers separated by commas:',
