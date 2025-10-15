@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         TBToolkit v2.1 RELEASE
+// @name         TBToolkit v2.2
 // @namespace    http://tampermonkey.net/
-// @version      2.1
+// @version      2.2
 // @description  Conjunto de utilidades para as plataformas DMNS - Kayako, WHMCS, cPanel.
 // @author       FXVNDER (fxvnder.com), HTL (hallows-tech-labs.pt)
 // @match        https://suporte.dominios.pt/staff/*
@@ -438,31 +438,15 @@
         observer.observe(document.body, { childList: true, subtree: true });
     }
 
-    /** Lógica para a página ToDoList do WHMCS. */
+    /** Lógica para ToDoList do WHMCS. */
     function setupToDoListPage() {
-        console.log('DMNSToolkit LOADED - WHMCS ToDoList');
         const descriptionArea = document.querySelector('textarea[name="description"]');
-
         if (descriptionArea && !descriptionArea.dataset.processed) {
-            const text = descriptionArea.value;
-            const serviceIdMatch = text.match(/Serviceid:\s*(\d+)/);
-
+            const serviceIdMatch = descriptionArea.value.match(/Serviceid:\s*(\d+)/);
             if (serviceIdMatch && serviceIdMatch[1]) {
                 const serviceId = serviceIdMatch[1];
-
-                const whmcsButton = createButton(
-                    'Pesquisar Serviço no WHMCS',
-                    ICON_EXTERNAL_LINK,
-                    () => {
-                        // Apenas define os valores que serão lidos na nova aba
-                        GM_setValue('whmcsSearchType', 'services');
-                        GM_setValue('whmcsSearchField', 'Service ID');
-                        GM_setValue('whmcsSearchQuery', serviceId);
-                    },
-                    true, // É uma âncora
-                    'https://my.dominios.pt/cp2002/' // Navega para esta página
-                );
-
+                const serviceUrl = `https://my.dominios.pt/cp2002/clientsservices.php?id=${serviceId}`;
+                const whmcsButton = createButton('Abrir Serviço no WHMCS', ICON_EXTERNAL_LINK, null, true, serviceUrl);
                 const parentElement = descriptionArea.closest('.fieldarea');
                 if (parentElement) {
                     const buttonContainer = document.createElement('div');
@@ -471,9 +455,6 @@
                     parentElement.appendChild(buttonContainer);
                 }
                 descriptionArea.dataset.processed = 'true';
-                console.log(`DMNSToolkit: Botão de pesquisa para ServiceID ${serviceId} adicionado.`);
-            } else {
-                console.log('DMNSToolkit: ServiceID não encontrado na descrição.');
             }
         }
     }
