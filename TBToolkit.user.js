@@ -22,8 +22,13 @@
     'use strict';
 
     // --- Ícones SVG ---
-    const ICON_COPY = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>`;
-    const ICON_EXTERNAL_LINK = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>`;
+    // Suportado através de Unicode
+    const ICON_COPY = '📋'
+    const ICON_EXTERNAL_LINK = '🔗'
+    const ICON_GEAR = '⚙️'
+    const ICON_FLOPPY = '💾'
+    const ICON_QUESTION = '❔'
+    const ICON_TEST = '🧪'
 
     // --- Funções de Ajuda ---
 
@@ -220,7 +225,7 @@
             'Whois.com': `https://whois.com/whois/${domain}`,
         };
         for (const [site, url] of Object.entries(whoisSites)) {
-            const whoisButton = createButton(site, ICON_EXTERNAL_LINK, null, true, url);
+            const whoisButton = createButton(site, ICON_QUESTION, null, true, url);
             whoisLinksContainer.appendChild(whoisButton);
         }
         mainContainer.appendChild(whoisSection);
@@ -239,7 +244,7 @@
 
             const domainWithoutTld = domain.substring(0, domain.lastIndexOf('.pt'));
             const ptUrl = `https://www.pt.pt/pt/ferramentas/whois/detalhes/?site=${domainWithoutTld}&tld=.pt`;
-            const whoisPtButton = createButton('Consultar PT.pt', ICON_EXTERNAL_LINK, null, true, ptUrl);
+            const whoisPtButton = createButton('Consultar PT.pt', ICON_QUESTION, null, true, ptUrl);
             whoisPtLinksContainer.appendChild(whoisPtButton);
             mainContainer.appendChild(whoisPtSection);
         }
@@ -392,7 +397,7 @@
             ]);
 
             // Button: Set NS
-            const setNsButton = createButton('Set NS', ICON_COPY, () => {
+            const setNsButton = createButton('Set NS', ICON_FLOPPY, () => {
                 // Always get the latest saved values each click, old ones are cached
                 const nsValues = GM_getValue('defaultNameservers', [
                     'dns1.example.com',
@@ -409,7 +414,7 @@
             });
 
             // Button: Edit NS
-            const editNsButton = createButton('Edit NS', ICON_EXTERNAL_LINK, () => {
+            const editNsButton = createButton('Edit NS', ICON_GEAR, () => {
                 const current = GM_getValue('defaultNameservers', savedNS);
                 const userInput = prompt(
                     'Enter 4 nameservers separated by commas:',
@@ -580,7 +585,7 @@
                             });
                             emailSectionContainer.appendChild(copyButton);
                         });
-                    const mailTesterButton = createButton('Testar no Mail-Tester.com', ICON_EXTERNAL_LINK, null, true, 'https://www.mail-tester.com/');
+                    const mailTesterButton = createButton('Testar no Mail-Tester.com', ICON_TEST, null, true, 'https://www.mail-tester.com/');
                     emailSectionContainer.appendChild(mailTesterButton);
                     newCell.appendChild(emailSectionContainer);
                     newRow.appendChild(newCell);
